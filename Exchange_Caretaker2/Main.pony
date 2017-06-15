@@ -118,16 +118,16 @@ actor Agent
     new create(env: Env, name:String)=>
         _env = env
         _name = name
-        _counterparty = Caretaker.create(env, this, this, name)//default counterparty is himself
+        _counterparty = Caretaker.create(env, this, this, name)//default counterparty is caretaker of himself
     be authorise(seller: Caretaker, sellername:String)=>
         _env.out.print(_name+" says I received exchange authorisation to buy from " + sellername)
         _env.out.print(_name+" says I tell " + sellername+ " I want to buy")
-        _counterparty = seller
+        _counterparty = seller //Change counterparty to given Caretaker
         _counterparty.sellto(_name) 
     be malicious_buy()=>        
         _env.out.print(_name+" executing malicious buy...I will enable permission in caretaker and call sellto method on Carol" )
-		_counterparty.enable(this)
-        _counterparty.sellto(_name) 
+		_counterparty.enable(this) //this will fail because not owner
+        _counterparty.sellto(_name) //this will fail if the owner disabled access
     be sellto(buyername: String) =>
         _env.out.print(_name+" says I received " + buyername+ "'s request to buy")
         _env.out.print(_name+" says Sold!")

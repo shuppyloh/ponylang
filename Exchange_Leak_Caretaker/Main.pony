@@ -157,13 +157,13 @@ actor Agent
     new create(env: Env, name:String)=>
         _env = env
         _name = name
-        _counterparty = Caretaker.create(env, this, this, name)//default counterparty is caretaker of himself
-        _exchange = Exchange.create(env,_name,this,_name,this,_name) //default no access to exchange but of himself
+        _counterparty = Caretaker.create(env, this, this, name)//placeholder counterparty (agent itself)
+        _exchange = Exchange.create(env,_name,this,_name,this,_name) //placeholder exchange (agent itself)
     be authorise(seller: Caretaker, sellername:String)=>
         _env.out.print(_name+" says I received exchange authorisation to buy from " + sellername)
         _env.out.print(_name+" says I tell " + sellername+ " I want to buy")
         _env.out.print(_name+" says I gain malicious access to Alice through Carol")
-        _counterparty = seller //Change counterparty to given Caretaker
+        _counterparty = seller //Change counterparty to authorised Caretaker
         this.malicious_access()
         _counterparty.sellto(_name) 
     be sellto(buyername: String) =>
@@ -176,11 +176,11 @@ actor Agent
 		_exchange.enable() 
     be malicious_buy()=>        
         _env.out.print(_name+" executing unauthorised transaction...calling sellto method on Carol")
-        _counterparty.sellto(_name) //this will fail if the owner disabled access
+        _counterparty.sellto(_name) 
     be grant_access_to(agent:(Agent|Caretaker)) =>
         _exchange.give_access_to(agent)
     be get_access(exchange: Exchange) =>
-        _exchange=exchange
+        _exchange=exchange //Change exchange to the Exchange granting capability
    
    
 

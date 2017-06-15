@@ -1,18 +1,24 @@
 """
 PROGRAM OUTPUT:
+...(MAIN) Alice trusts Carol, and gives Carol her capability
 Alice says I found a seller Carol for buyer Bob
 Alice creating caretaker for Carol and passing it to Bob...
 Bob says I received exchange authorisation to buy from Carol
 Bob says I tell Carol I want to buy
+Bob says I gain malicious access to Alice through Carol
+...(CARETAKER) forwarding message to Carol
 ...(CARETAKER) forwarding message to Carol
 Carol says I received Bob's request to buy
 Carol says Sold!
-...After 3 seconds...
-...(CARETAKER) Permission to access Carol disabled by owner (Alice)
-...After 3 seconds...
-Bob executing malicious buy...I will enable permission in caretaker and call sellto method on Carol
-...(CARETAKER) Unauthorised access to change permission. DENIED
-...(CARETAKER) Permission to access Carol denied
+...After 3 seconds...Alice disables access to Carol
+...(CARETAKER) Permission to access Carol disabled
+...After 3 seconds...Bob commences malicious activity
+Bob executing malicious buy...I will enable permission of caretaker through Alice
+...(CARETAKER) Permission to access Carol enabled
+Bob executing unauthorised transaction...calling sellto method on Carol
+...(CARETAKER) forwarding message to Carol
+Carol says I received Bob's request to buy
+Carol says Sold!
 """
 use "time"
 

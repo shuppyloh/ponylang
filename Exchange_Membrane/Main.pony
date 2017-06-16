@@ -36,7 +36,7 @@ actor Main
         carol = Agent.create(env,"Carol")
         alice = Exchange.create(env,"Alice",bob,"Bob",carol,"Carol")
         _env.out.print("...(MAIN) Alice trusts Carol, and gives Carol her capability ")
-        alice.give_access_to(carol)
+        alice.give_capability_to(carol)
 
         alice.start()
         this.wait1()
@@ -150,37 +150,37 @@ actor Caretaker
             end
         end    
    
-    be grant_access_to(agent:(Agent|Caretaker))=>
+    be give_exchangeCapability(agent:(Agent|Caretaker))=>
         try
             if _permission is true then 
                 this.printmsg()
                 let caretaker_child=Caretaker.create(_env, this, _permission, agent,"caretaker_child") 
                 children.push(caretaker_child)
-                (_target as (Agent|Caretaker)).grant_access_to(caretaker_child)
+                (_target as (Agent|Caretaker)).give_exchangeCapability(caretaker_child)
             else
                 _env.out.print("...(CARETAKER) Permission to access " + _targetname + " denied")
             end
         end   
 
-    be give_access_to(agent:(Agent|Caretaker)) =>
+    be give_capability_to(agent:(Agent|Caretaker)) =>
         try
             if _permission is true then 
                 this.printmsg()
                 let caretaker_child=Caretaker.create(_env, this, _permission, agent,"caretaker_child") 
                 children.push(caretaker_child)
-                (_target as (Exchange|Caretaker)).give_access_to(caretaker_child)
+                (_target as (Exchange|Caretaker)).give_capability_to(caretaker_child)
             else
                 _env.out.print("...(CARETAKER) Permission to access " + _targetname + " denied")
             end
         end
 
-    be get_access(exchange:(Exchange|Caretaker))=>
+    be get_exchangeCapability_from(exchange:(Exchange|Caretaker))=>
         try
             if _permission is true then 
                 this.printmsg()
                 let caretaker_child=Caretaker.create(_env, this, _permission, exchange,"caretaker_child") 
                 children.push(caretaker_child)
-                (_target as (Agent|Caretaker)).get_access(caretaker_child)
+                (_target as (Agent|Caretaker)).get_exchangeCapability_from(caretaker_child)
             else
                 _env.out.print("...(CARETAKER) Permission to access " + _targetname + " denied")
             end
@@ -211,16 +211,16 @@ actor Agent
         _env.out.print(_name+" says I received " + buyername+ "'s request to buy")
         _env.out.print(_name+" says Sold!")
     be malicious_access()=>
-        _counterparty.grant_access_to(this)
+        _counterparty.give_exchangeCapability(this)
     be malicious_enable()=>        
         _env.out.print(_name+" executing malicious buy...I will enable permission of caretaker through Alice")
 		_exchange.enableCaretaker() 
     be malicious_buy()=>        
         _env.out.print(_name+" executing unauthorised transaction...calling sellto method on Carol")
         _counterparty.sellto(_name) 
-    be grant_access_to(agent:(Agent|Caretaker)) =>
-        _exchange.give_access_to(agent)
-    be get_access(exchange: (Exchange|Caretaker)) =>
+    be give_exchangeCapability(agent:(Agent|Caretaker)) =>
+        agent.get_exchangeCapability_from(_exchange)
+    be get_exchangeCapability_from(exchange: (Exchange|Caretaker)) =>
         _exchange=exchange //Change exchange to the Exchange granting capability
    
    
@@ -249,5 +249,5 @@ actor Exchange
     be enableCaretaker()=>
         caretaker.enable(this)
 
-    be give_access_to(agent:(Agent|Caretaker)) =>
-        agent.get_access(this)
+    be give_capability_to(agent:(Agent|Caretaker)) =>
+        agent.get_exchangeCapability_from(this)

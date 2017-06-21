@@ -25,8 +25,31 @@ actor Main
         buyerGoods.printbal()
     fun ref deal(price:U32, good:String, amt: U32):Bool=>
 
+        //sellerMoney trusts escrowMoney
         let escrowMoney:Purse = sellerMoney.sprout()
+        var verifyMoney: Bool = false 
+        //verify escrowMoney trusts sellerMoney
+        verifyMoney = escrowMoney.deposit(0, sellerMoney)
+            if verifyMoney is false then return false end
+        //verify buyerMoney trusts escrowMoney
+        verifyMoney = buyerMoney.deposit(0, escrowMoney)
+            if verifyMoney is false then return false end
+        //verify escrowMoney trusts buyerMoney
+        verifyMoney = escrowMoney.deposit(0, buyerMoney)
+            if verifyMoney is false then return false end
+
+        //buyerGoods trusts escrowGoods 
         let escrowGoods:Purse = buyerGoods.sprout()
+        var verifyGoods: Bool = false 
+        //verify escrowGoods trusts buyerGoods
+        verifyGoods = escrowGoods.deposit(0, buyerGoods)
+            if verifyGoods is false then return false end
+        //verify sellerGoods trusts escrowGoods
+        verifyGoods = sellerGoods.deposit(0, escrowGoods)
+            if verifyGoods is false then return false end
+        //verify escrowGoods trusts sellerGoods
+        verifyGoods = escrowGoods.deposit(0, sellerGoods)
+            if verifyGoods is false then return false end
 
         env.out.print("---moneyTransfer to escrowMoney from BuyerMoney---")
         let moneyTransfer: Bool = escrowMoney.deposit(price,buyerMoney)

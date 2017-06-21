@@ -31,7 +31,7 @@ actor Main
         env.out.print("---moneyTransfer to escrowMoney from BuyerMoney---")
         let moneyTransfer: Bool = escrowMoney.deposit(price,buyerMoney)
         if moneyTransfer is false then 
-            env.out.print("insufficient money or different mint/currency") 
+            env.out.print("insufficient money or different money type") 
             return false end
         escrowMoney.printbal()
         buyerMoney.printbal()
@@ -39,7 +39,7 @@ actor Main
         env.out.print("---goodsTransfer to escrowGoods from sellerGoods---")
         let goodsTransfer: Bool = escrowGoods.deposit(amt,sellerGoods)
         if goodsTransfer is false then  //we have to reverse the buyer transaction
-            env.out.print("insufficient amt of goods") 
+            env.out.print("insufficient goods or different goods type") 
             buyerMoney.deposit(price, escrowMoney)
             return false end
         escrowGoods.printbal()

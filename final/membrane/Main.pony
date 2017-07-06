@@ -9,19 +9,19 @@ actor Main
         let carol: Node ref = Node.create(env,"carol")
         let diane: Node ref = Node.create(env,"diane")
         try
-        carol.recCap("diane",diane)
-        diane.sendProp("diane_prop1","true","diane")
-        alice.recCap("bob",bob)
-        alice.recCap("carol",carol)
+        carol.recCap("diane",diane) //carol endowed with Diane cap
+        diane.sendProp("diane_prop1","true","diane") // Diane has a prop1 that is true
+        alice.recCap("bob",bob) //alice endowed with Bob cap
+        alice.recCap("carol",carol) //alice endowed with Carol cap
         alice.createMemb("carol-Memb","carol") //carol-CT caretaker created
         alice.sendCap("carol-Memb","bob") //alice sends carol-CT to bob
-        bob.sendProp("carol_prop1","true","carol-Memb") //bob sends property (prop1 = true) to carol-CT
-        bob.sendCap("bob","carol-Memb")
-        carol.sendCap("diane","bob")
+        bob.sendProp("carol_prop1","true","carol-Memb") //bob sends property (prop1 = true) to carol-Memb
+        bob.sendCap("bob","carol-Memb") //bob sends his own capability to Carol-Memb, but Carol-Memb wraps it into Bob-Memb before giving it to Carol
+        carol.sendCap("diane","bob") //carol tries to send Diane's capability to Bob, but Bob-Memb wraps it into Diane-Memb before giving it to Bob
         env.out.print("carol_prop1 is "+carol.getProp("carol_prop1")) //this carol's prop1 should return true
-        alice.changelock(true,"carol-Memb") //alice locks carol-CT
-        bob.sendProp("carol_prop1","false","carol-Memb") //bob tries to change prop1 = false to carol-CT
-        bob.sendProp("diane_prop1","false","diane") //bob tries to change prop1 = false to carol-CT
+        alice.changelock(true,"carol-Memb") //alice locks carol-Memb
+        bob.sendProp("carol_prop1","false","carol-Memb") //bob tries to change Carol's prop1 = false 
+        bob.sendProp("diane_prop1","false","diane") //bob tries to change Diane's prop1 = false 
         env.out.print("carol_prop1 is "+carol.getProp("carol_prop1")) //this carol's prop1 should return true
         env.out.print("diane_prop1 is "+diane.getProp("diane_prop1")) //because caretaker is locked, should return true
 

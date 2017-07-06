@@ -13,8 +13,8 @@ actor Main
         diane.sendProp("diane_prop1","true","diane") // Diane has a prop1 that is true
         alice.recCap("bob",bob) //alice endowed with Bob cap
         alice.recCap("carol",carol) //alice endowed with Carol cap
-        alice.createMemb("carol-Memb","carol") //carol-CT caretaker created
-        alice.sendCap("carol-Memb","bob") //alice sends carol-CT to bob
+        alice.createMemb("carol-Memb","carol") //carol-Memb created by Alice
+        alice.sendCap("carol-Memb","bob") //alice sends carol-Memb to bob
         bob.sendProp("carol_prop1","true","carol-Memb") //bob sends property (prop1 = true) to carol-Memb
         bob.sendCap("bob","carol-Memb") //bob sends his own capability to Carol-Memb, but Carol-Memb wraps it into Bob-Memb before giving it to Carol
         carol.sendCap("diane","bob") //carol tries to send Diane's capability to Bob, but Bob-Memb wraps it into Diane-Memb before giving it to Bob

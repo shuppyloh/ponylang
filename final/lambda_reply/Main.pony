@@ -21,7 +21,7 @@ class Sender
     fun ref lambda_notify(target: Receiver ref)=>
         let myself:Sender ref = this
             target.lambda_call({(target: Receiver ref)(myself)=>
-            target.notify()
+            target.lambda_notify()
             myself.finished(target.name)
             }val)
     */

@@ -13,11 +13,6 @@ class Sender
     var name: String
     new create(env':Env, name':String)=>
         env = env'; name = name'
-    /*  this function yields the error:
-        "this parameter must be sendable (iso, val or tag)
-        let myself:Sender ref = this"   
-
-    */
     fun ref lambda_notify(target: Receiver ref)=>
         let myself:Sender ref = this
             target.lambda_call({(target: Receiver ref)(myself)=>

@@ -5,8 +5,6 @@ actor Main
         let alice = Receiver.create(env,"alice")
         let bob = Sender.create(env,"bob")
         bob.lambda_notify(alice)
-        /* function call does not work 
-        */
 
 class Sender 
     let env: Env

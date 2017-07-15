@@ -1,9 +1,15 @@
+// The purpose of this snippet is to demonstarte how, through the unde of 
+// lambda-s, it is possible to instruct an object to notify another object
+// without allowing the first object to store the identity of the secvond one
+
+// Can you turn Sender and Receiver to actors?
+
 actor Main
     let env: Env
     new create(env':Env)=>
         env = env'
-        let alice = Receiver.create(env,"alice")
         let bob = Sender.create(env,"bob")
+        let alice = Receiver.create(env,"alice")
         bob.lambda_notify(alice)
 
 class Sender 
